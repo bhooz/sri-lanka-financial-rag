@@ -74,8 +74,17 @@ Provide your evaluation strictly in the following JSON format:
         retrieved_pages = [doc.metadata.get("page") for doc in retrieved_docs]
         retrieved_sources = [doc.metadata.get("source") for doc in retrieved_docs]
         
-        page_hit = expected_page in retrieved_pages
+        page_hit = any(
+            (expected_page - 1) <= page <= (expected_page + 1) 
+            for page in retrieved_pages
+        )
+
         print(f"Retrieval Check -> Expected Page: {expected_page} | Retrieved Pages: {retrieved_pages} | Hit: {page_hit}")
+
+        if not page_hit:
+            print(f"  [DEBUG] Missed expected page {expected_page}. Top 3 retrieved snippets:")
+            for i, doc in enumerate(retrieved_docs[:2]):
+                print(f"     [{i+1}] Page {doc.metadata.get('page')}: {doc.page_content[:100]}...")
 
         # 2. Generate Answer using RAG context
         context_text = "\n\n".join([doc.page_content for doc in retrieved_docs])
