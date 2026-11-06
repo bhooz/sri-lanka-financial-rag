@@ -1,0 +1,32 @@
+[
+  {
+    "question": "What is the full form of AML?",
+    "ground_truth_answer": "Anti-Money Laundering",
+    "source": "fsr_2026e.pdf",
+    "page": 12
+  },
+  {
+    "question": "What is the full form of NSFR?",
+    "ground_truth_answer": "Net Stable Funding Ratio",
+    "source": "fsr_2026e.pdf",
+    "page": 13
+  },
+  {
+    "question": "What does PDCs stand for in the context of the Financial Stability Review 2026?",
+    "ground_truth_answer": "Primary Dealer Companies",
+    "source": "fsr_2026e.pdf",
+    "page": 14
+  },
+  {
+    "question": "What was the primary factor that supported the stability of Sri Lanka's financial system during the first half of 2026?",
+    "ground_truth_answer": "The continued recovery in economic activity",
+    "source": "fsr_2026e.pdf",
+    "page": 15
+  },
+  {
+    "question": "Did the banking sector's capital adequacy ratios decline despite continued buildup of capital?",
+    "ground_truth_answer": "Yes",
+    "source": "fsr_2026e.pdf",
+    "page": 16
+  }
+]
