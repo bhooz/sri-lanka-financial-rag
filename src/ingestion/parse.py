@@ -1,50 +1,44 @@
-import os
 from pathlib import Path
-import fitz  # PyMuPDF
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 import json
 
-RAW_DIR = Path("data/raw")
-PROCESSED_DIR = Path("data/processed")
-PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+def parse_pdfs():
+    pdf_dir = Path("data/raw")
+    processed_output = Path("data/processed/corpus_processed.json")
+    processed_output.parent.mkdir(parents=True, exist_ok=True)
 
-def parse_financial_pdf(pdf_path: Path):
-    """Parses a Central Bank or financial PDF preserving page-level structure and metadata."""
-    doc = fitz.open(pdf_path)
-    parsed_documents = []
-    
-    for page_num in range(len(doc)):
-        page = doc[page_num]
-        text = page.get_text("text")
-        
-        # Basic cleaning: skip empty pages or handle running headers if necessary
-        cleaned_text = text.strip()
-        if not cleaned_text:
-            continue
-            
-        metadata = {
-            "source": pdf_path.name,
-            "page": page_num + 1,
-            "total_pages": len(doc)
-        }
-        
-        parsed_documents.append({
-            "content": cleaned_text,
-            "metadata": metadata
-        })
-        
-    return parsed_documents
+    # 1. Configure smaller chunk size and overlap to preserve acronym definitions
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500,     # Reduced size to keep acronyms/definitions tightly packed
+        chunk_overlap=100,  # Overlap ensures boundary terms are retained across chunks
+        separators=["\n\n", "\n", " ", ""]
+    )
 
-def run_ingestion():
     all_chunks = []
-    for pdf_file in RAW_DIR.glob("*.pdf"):
-        print(f"Parsing: {pdf_file.name}...")
-        docs = parse_financial_pdf(pdf_file)
-        all_chunks.extend(docs)
-        
-    output_file = PROCESSED_DIR / "corpus_processed.json"
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(all_chunks, f, ensure_ascii=False, indent=2)
-    print(f"Ingestion complete. Saved {len(all_chunks)} pages to {output_file}")
+
+    print("Loading and re-chunking PDFs...")
+    for pdf_path in pdf_dir.glob("*.pdf"):
+        loader = PyPDFLoader(str(pdf_path))
+        pages = loader.load()
+
+        for page in pages:
+            splits = text_splitter.split_documents([page])
+            
+            for split in splits:
+                all_chunks.append({
+                    "content": split.page_content,
+                    "metadata": {
+                        "source": pdf_path.name,
+                        "page": page.metadata.get("page", 0) + 1,
+                        "total_pages": len(pages)
+                    }
+                })
+
+    with open(processed_output, "w", encoding="utf-8") as f:
+        json.dump(all_chunks, f, indent=2, ensure_ascii=False)
+
+    print(f"Successfully re-processed {len(all_chunks)} chunks into {processed_output}")
 
 if __name__ == "__main__":
-    run_ingestion()
+    parse_pdfs()

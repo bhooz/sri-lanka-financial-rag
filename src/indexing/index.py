@@ -1,74 +1,49 @@
 import json
 from pathlib import Path
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_qdrant import Qdrant
-from qdrant_client import QdrantClient
-from qdrant_client.http.models import Distance, VectorParams
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_qdrant import QdrantVectorStore, FastEmbedSparse, RetrievalMode
 
-PROCESSED_FILE = Path("data/processed/corpus_processed.json")
-QDRANT_PATH = "data/qdrant_db"  # Local embedded Qdrant storage folder
-COLLECTION_NAME = "finance_rag_corpus"
+# Paths & Settings
+PROCESSED_DATA_PATH = Path("data/processed/corpus_processed.json")
+QDRANT_PATH = "data/qdrant_db"
+COLLECTION_NAME = "sri_lanka_financial_reports_hybrid"
 
-def run_indexing():
-    print("Loading processed corpus...")
-    with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
+def build_hybrid_index():
+    print("Loading processed chunks...")
+    with open(PROCESSED_DATA_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
-        
-    print(f"Loaded {len(data)} pages from corpus.")
-    
-    # Convert JSON pages to LangChain Document objects
-    documents = []
-    for item in data:
-        doc = Document(
+
+    # Convert raw chunks to LangChain Document objects
+    documents = [
+        Document(
             page_content=item["content"],
-            metadata=item["metadata"]
+            metadata={
+                "source": item["metadata"].get("source", ""),
+                "page": item["metadata"].get("page", 0)
+            }
         )
-        documents.append(doc)
-        
-    # Configure text splitter (Chunking strategy experiment baseline)
-    print("Chunking documents...")
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len,
-        separators=["\n\n", "\n", " ", ""]
-    )
-    
-    docs_chunked = text_splitter.split_documents(documents)
-    print(f"Split {len(documents)} pages into {len(docs_chunked)} chunks.")
-    
-    # Initialize Embedding Model (Open-source BGE or MiniLM)
-    print("Loading embedding model (all-MiniLM-L6-v2)...")
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    
-    # Initialize local Qdrant client
-    print(f"Initializing local Qdrant database at '{QDRANT_PATH}'...")
-    client = QdrantClient(path=QDRANT_PATH)
-    
-    # Check if collection exists, if not create it
-    collections = client.get_collections().collections
-    exists = any(col.name == COLLECTION_NAME for col in collections)
-    
-    if not exists:
-        client.create_collection(
-            collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=384, distance=Distance.COSINE),
-        )
-        print(f"Created Qdrant collection: {COLLECTION_NAME}")
-    
-    # Store chunks in Qdrant via LangChain wrapper
-    print("Embedding and indexing chunks into Qdrant (this may take a moment)...")
-    vector_store = Qdrant(
-        client=client,
+        for item in data
+    ]
+    print(f"Loaded {len(documents)} document chunks.")
+
+    # 1. Initialize Dense (Semantic) & Sparse (BM25 Keyword) Embeddings
+    print("Initializing embedding models...")
+    dense_embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    sparse_embeddings = FastEmbedSparse(model_name="Qdrant/bm25")
+
+    # 2. Build or Overwrite Qdrant Collection with Hybrid Retrieval Mode
+    print("Indexing documents into Qdrant in HYBRID mode...")
+    vector_store = QdrantVectorStore.from_documents(
+        documents=documents,
+        embedding=dense_embeddings,
+        sparse_embedding=sparse_embeddings,
+        path=QDRANT_PATH,
         collection_name=COLLECTION_NAME,
-        embeddings=embeddings,
+        retrieval_mode=RetrievalMode.HYBRID,
     )
-    
-    # Add documents in batches to avoid memory spikes
-    vector_store.add_documents(docs_chunked)
-    print(f"Successfully indexed {len(docs_chunked)} chunks into Qdrant!")
+
+    print(f"Indexing complete! Collection '{COLLECTION_NAME}' created at {QDRANT_PATH}.")
 
 if __name__ == "__main__":
-    run_indexing()
+    build_hybrid_index()
