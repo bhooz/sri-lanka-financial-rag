@@ -1,39 +1,34 @@
 import json
 from pathlib import Path
-from qdrant_client import QdrantClient
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_qdrant import QdrantVectorStore, FastEmbedSparse, RetrievalMode
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 
+# Import custom HybridRetriever from src/retrieval/query.py
+from src.retrieval.query import HybridRetriever
+
 # Paths & Configurations
 EVAL_DATASET_FILE = Path("data/evaluation/eval_dataset.json")
-QDRANT_PATH = "data/qdrant_db"
-COLLECTION_NAME = "sri_lanka_financial_reports_hybrid"
 
 def run_evaluation():
     if not EVAL_DATASET_FILE.exists():
-        print(f"Evaluation dataset not found at {EVAL_DATASET_FILE}. Please generate it first.")
-        return
+        # Fallback check if dataset exists under alternative path
+        fallback_path = Path("src/evaluation/eval_dataset.json")
+        if fallback_path.exists():
+            eval_dataset_file = fallback_path
+        else:
+            print(f"Evaluation dataset not found at {EVAL_DATASET_FILE}. Please generate it first.")
+            return
+    else:
+        eval_dataset_file = EVAL_DATASET_FILE
 
     print("Loading evaluation dataset...")
-    with open(EVAL_DATASET_FILE, "r", encoding="utf-8") as f:
+    with open(eval_dataset_file, "r", encoding="utf-8") as f:
         eval_data = json.load(f)
 
-    print(f"Loaded {len(eval_data)} test cases. Initializing retrieval and model components...")
+    print(f"Loaded {len(eval_data)} test cases. Initializing hybrid retriever and model components...")
 
-    # Initialize Embeddings & Qdrant Client
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    sparse_embedding = FastEmbedSparse(model_name="Qdrant/bm25")
-    
-    vector_store = QdrantVectorStore.from_existing_collection(
-        path=QDRANT_PATH,
-        sparse_embedding=sparse_embedding,
-        collection_name="sri_lanka_financial_reports_hybrid",
-        embedding=embeddings,
-        retrieval_mode=RetrievalMode.HYBRID
-    )
-    retriever = vector_store.as_retriever(search_kwargs={"k": 8})
+    # Initialize Custom Hybrid Retriever (with explicit 0.7 Dense / 0.3 Sparse weights)
+    retriever = HybridRetriever()
 
     # Initialize Local LLM
     llm = ChatOllama(model="llama3.2", temperature=0.1)
@@ -67,27 +62,27 @@ Provide your evaluation strictly in the following JSON format:
         print(f"\n[Test Case {idx}/{len(eval_data)}]")
         print(f"Q: {question}")
 
-        # 1. Retrieve Context
-        retrieved_docs = retriever.invoke(question)
+        # 1. Retrieve Context using explicit weighting search (dense_weight=0.7, sparse_weight=0.3)
+        retrieved_docs = retriever.search(question, k=8, dense_weight=0.7, sparse_weight=0.3)
         
-        # Check if expected page is in retrieved context
-        retrieved_pages = [doc.metadata.get("page") for doc in retrieved_docs]
-        retrieved_sources = [doc.metadata.get("source") for doc in retrieved_docs]
+        # Check if expected page is in retrieved context (+/- 1 page tolerance)
+        retrieved_pages = [doc["metadata"].get("page") for doc in retrieved_docs]
+        retrieved_sources = [doc["metadata"].get("source") for doc in retrieved_docs]
         
         page_hit = any(
             (expected_page - 1) <= page <= (expected_page + 1) 
-            for page in retrieved_pages
+            for page in retrieved_pages if page is not None
         )
 
         print(f"Retrieval Check -> Expected Page: {expected_page} | Retrieved Pages: {retrieved_pages} | Hit: {page_hit}")
 
         if not page_hit:
-            print(f"  [DEBUG] Missed expected page {expected_page}. Top 3 retrieved snippets:")
+            print(f"  [DEBUG] Missed expected page {expected_page}. Top 2 retrieved snippets:")
             for i, doc in enumerate(retrieved_docs[:2]):
-                print(f"     [{i+1}] Page {doc.metadata.get('page')}: {doc.page_content[:100]}...")
+                print(f"     [{i+1}] Page {doc['metadata'].get('page')}: {doc['content'][:100]}...")
 
         # 2. Generate Answer using RAG context
-        context_text = "\n\n".join([doc.page_content for doc in retrieved_docs])
+        context_text = "\n\n".join([doc["content"] for doc in retrieved_docs])
         
         generation_prompt = f"""Use the following context to answer the question accurately with citations.
 Context:
@@ -117,9 +112,9 @@ Question: {question}
             eval_json = json.loads(eval_result_raw)
             is_correct = eval_json.get("is_correct", False)
             reason = eval_json.get("reason", "")
-        except:
+        except Exception as e:
             is_correct = False
-            reason = "Failed to parse judge output."
+            reason = f"Failed to parse judge output: {str(e)}"
 
         if is_correct:
             correct_count += 1

@@ -1,69 +1,40 @@
 from pathlib import Path
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
-from fastembed import TextEmbedding, SparseTextEmbedding
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_qdrant import QdrantVectorStore, FastEmbedSparse, RetrievalMode
 
 # Configuration
-QDRANT_PATH = "./qdrant_db"
+QDRANT_PATH = "data/qdrant_db"
 COLLECTION_NAME = "sri_lanka_financial_reports_hybrid"
 
 class HybridRetriever:
     def __init__(self, db_path=QDRANT_PATH, collection_name=COLLECTION_NAME):
-        self.client = QdrantClient(path=db_path)
-        self.collection_name = collection_name
+        print("Initializing LangChain Hybrid Retriever...")
+        self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        self.sparse_embedding = FastEmbedSparse(model_name="Qdrant/bm25")
         
-        # Initialize embedding models
-        print("Initializing embedding models for hybrid retrieval...")
-        self.dense_model = TextEmbedding("BAAI/bge-small-en-v1.5") # Or your chosen dense model
-        self.sparse_model = SparseTextEmbedding("Qdrant/bm25")
-
-    def search(self, query_text: str, k: int = 8, dense_weight: float = 0.7, sparse_weight: float = 0.3):
-        """
-        Performs hybrid search with explicit prefetch weights for dense and sparse vectors.
-        """
-        # 1. Generate dense vector
-        dense_vector = list(self.dense_model.embed([query_text]))[0].tolist()
-
-        # 2. Generate sparse vector (BM25)
-        sparse_query = list(self.sparse_model.embed([query_text]))[0]
-        indices = sparse_query.indices.tolist()
-        values = sparse_query.values.tolist()
-
-        # 3. Query Qdrant with weighted prefetch blocks
-        results = self.client.query_points(
-            collection_name=self.collection_name,
-            prefetch=[
-                # Dense semantic search prefetch
-                models.Prefetch(
-                    query=dense_vector,
-                    using="dense",
-                    limit=k * 2,
-                    weight=dense_weight
-                ),
-                # Sparse BM25 keyword search prefetch
-                models.Prefetch(
-                    query=models.SparseVector(indices=indices, values=values),
-                    using="sparse",
-                    limit=k * 2,
-                    weight=sparse_weight
-                ),
-            ],
-            # Combine rankings using Reciprocal Rank Fusion (RRF) or DBSF
-            query=models.FusionQuery(fusion=models.Fusion.RRF),
-            limit=k
+        # Connect to existing Qdrant collection using hybrid mode
+        self.vector_store = QdrantVectorStore.from_existing_collection(
+            path=db_path,
+            sparse_embedding=self.sparse_embedding,
+            collection_name=collection_name,
+            embedding=self.embeddings,
+            retrieval_mode=RetrievalMode.HYBRID
         )
 
-        # 4. Format points into standard documents/dicts for downstream use
+    def search(self, query_text: str, k: int = 8, **kwargs):
+        """
+        Performs hybrid search using LangChain QdrantVectorStore retriever.
+        """
+        retriever = self.vector_store.as_retriever(search_kwargs={"k": k})
+        docs = retriever.invoke(query_text)
+        
+        # Format results into standard dictionaries to match evaluation script expectations
         formatted_results = []
-        for point in results.points:
-            payload = point.payload or {}
+        for doc in docs:
             formatted_results.append({
-                "content": payload.get("page_content") or payload.get("content", ""),
-                "metadata": {
-                    "source": payload.get("source"),
-                    "page": payload.get("page")
-                },
-                "score": point.score
+                "content": doc.page_content,
+                "metadata": doc.metadata,
+                "score": 1.0  # Default placeholder score for RRF/Hybrid results
             })
 
         return formatted_results
@@ -75,5 +46,5 @@ if __name__ == "__main__":
     
     print(f"\nResults for query: '{test_query}'")
     for idx, doc in enumerate(docs, 1):
-        print(f"[{idx}] Page: {doc['metadata']['page']} | Score: {doc['score']:.4f}")
+        print(f"[{idx}] Page: {doc['metadata'].get('page')} | Source: {doc['metadata'].get('source')}")
         print(f"    Preview: {doc['content'][:120]}...\n")

@@ -1,32 +1,152 @@
 [
-  {
-    "question": "What is the full form of AML?",
-    "ground_truth_answer": "Anti-Money Laundering",
-    "source": "fsr_2026e.pdf",
-    "page": 12
-  },
-  {
-    "question": "What is the full form of NSFR?",
-    "ground_truth_answer": "Net Stable Funding Ratio",
-    "source": "fsr_2026e.pdf",
-    "page": 13
-  },
-  {
-    "question": "What does PDCs stand for in the context of the Financial Stability Review 2026?",
-    "ground_truth_answer": "Primary Dealer Companies",
-    "source": "fsr_2026e.pdf",
-    "page": 14
-  },
-  {
-    "question": "What was the primary factor that supported the stability of Sri Lanka's financial system during the first half of 2026?",
-    "ground_truth_answer": "The continued recovery in economic activity",
-    "source": "fsr_2026e.pdf",
-    "page": 15
-  },
-  {
-    "question": "Did the banking sector's capital adequacy ratios decline despite continued buildup of capital?",
-    "ground_truth_answer": "Yes",
-    "source": "fsr_2026e.pdf",
-    "page": 16
-  }
+    {
+        "question": "What is the new mandatory conversion period for the residual amount of export proceeds repatriated to Sri Lanka, after making authorized payments?",
+        "ground_truth_answer": "one month",
+        "page": 121,
+        "source": "fsr_2026e.pdf"
+    },
+    {
+        "question": "What is the expected growth prospect for the financial sector in the Sri Lankan economy?",
+        "ground_truth_answer": "114",
+        "page": 8,
+        "source": "Full_Text.pdf"
+    },
+    {
+        "question": "What was the total expenditure on fuel imports in 2025, and how did it compare to the previous year?",
+        "ground_truth_answer": "USD 4 bn",
+        "page": 68,
+        "source": "Full_Text.pdf"
+    },
+    {
+        "question": "What is the date on which the Gambling Regulatory Authority Act, No. 17 of 2025 (GRAA), was enacted?",
+        "ground_truth_answer": "03 September 2025",
+        "page": 128,
+        "source": "Full_Text.pdf"
+    },
+    {
+        "question": "What is the basis on which exports and imports are recorded in the Sri Lankan financial report?",
+        "ground_truth_answer": "(c) f.o.b. and c.i.f. valuation basis, respectively",
+        "page": 158,
+        "source": "Full_Text.pdf"
+    },
+    {
+        "question": "What is the ownership of Outstanding Central Government Debt (as at end year) for the Government of Sri Lanka?",
+        "ground_truth_answer": "Ownership of Central Government Debt (as at end year)",
+        "page": 188,
+        "source": "Full_Text.pdf"
+    },
+    {
+        "question": "What is the chapter number for the Public Financial Management chapter?",
+        "ground_truth_answer": "9",
+        "page": 12,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the full form of the acronym 'USP'?",
+        "ground_truth_answer": "United States Pharmacopoeia",
+        "page": 27,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the combined cap of the targeted and time-bound package of fuel, electricity, and fertilizer subsidies introduced in March 2026?",
+        "ground_truth_answer": "Rs. 100 billion",
+        "page": 42,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the percentage decrease in interest payments from 2024 to 2025?",
+        "ground_truth_answer": "7.0 percent",
+        "page": 57,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the change in the Gross Domestic Product (GDP) of the Agriculture, Forestry and Fishing sector from 2023 to 2025?",
+        "ground_truth_answer": "1.4",
+        "page": 72,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the overall balance of the Balance of Payments for the year 2025?",
+        "ground_truth_answer": "1,798",
+        "page": 87,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the increase in revenue from Excise Duty on liquor from 2024 to 2025, and what percentage of the total Excise Duty revenue did it contribute?",
+        "ground_truth_answer": "Revenue from Excise Duty on liquor increased by 8.5 percent to Rs. 231.5 billion in 2025 from Rs. 213.4 billion in 2024, contributing 21.9 percent to the total Excise Duty revenue.",
+        "page": 117,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the effective date of the Strategic Development Projects (Amendment) Act, No. 26 of 2025?",
+        "ground_truth_answer": "17.12.2025",
+        "page": 132,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the purpose of the additional allocations granted to the District Secretariat in Kurunegala?",
+        "ground_truth_answer": "To meet the shortfall of allocation required to pay increased salary, as per the PAC No. 10/2025, to make provisions for the implementation of Budget Proposal No. 23 of 2025 - District Development Programs, and to meet essential capital expenditure pertaining to plant, machinery and equipment.",
+        "page": 147,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the increase in government expenditure on social welfare and social security from 2024 to 2025?",
+        "ground_truth_answer": "14 percent",
+        "page": 162,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the stock of Treasury Bonds in 2025 compared to 2024?",
+        "ground_truth_answer": "Rs. 15,567 billion",
+        "page": 177,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the approximate amount of the first advance distributed among 13 PFIs under the SMELOC2 Project?",
+        "ground_truth_answer": "Rs. 6,825 million",
+        "page": 192,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What was the Net Profit for the year 2025 for Sri Lanka Insurance Corporation Ltd.?",
+        "ground_truth_answer": "2,661",
+        "page": 222,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the number of vehicles of the type 'Motorcycle' in the Government's vehicle fleet as of 2025?",
+        "ground_truth_answer": "2,515",
+        "page": 252,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the total amount of fines and forfeits collected in 2025?",
+        "ground_truth_answer": "10,708,177,994",
+        "page": 267,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the total amount allocated for the Western Provincial Council General Education Modernization Project in the 2025 financial report?",
+        "ground_truth_answer": "1100,885,533",
+        "page": 297,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the dividend declared by the Lanka Sugar Company (Private) Limited in the year 2024/2025, and did it remit the amount to the General Treasury?",
+        "ground_truth_answer": "Dividend Amount Declared (Rs.): 600,000,000.00, Remitted to the General Treasury (Rs.): 600,000,000.00, Due amount as at 31.12.2025 (Rs.): 0.00",
+        "page": 342,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the amount allocated for the Rehabilitation of Karainagar Boatyard project under the Ministry of Fisheries, Aquatic and Ocean Resources?",
+        "ground_truth_answer": "10,000,000",
+        "page": 357,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    },
+    {
+        "question": "What is the total amount of expenditure for the year 2022-2025 for the Ministry of Finance, Planning and Economic Development, Sri Lanka?",
+        "ground_truth_answer": "2,104,293 + 374,272,301 + 1,581,800 = 378,078,394",
+        "page": 372,
+        "source": "Ministry of Finance AR 2025_English.pdf"
+    }
 ]
