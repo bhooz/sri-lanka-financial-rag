@@ -1,4 +1,5 @@
 import json
+import csv
 from pathlib import Path
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
@@ -123,6 +124,8 @@ Question: {question}
         
         results.append({
             "question": question,
+            "expected_page": expected_page,
+            "retrieved_pages": retrieved_pages,
             "page_hit": page_hit,
             "is_correct": is_correct,
             "reason": reason
@@ -138,6 +141,44 @@ Question: {question}
     print(f"Retrieval Hit Rate (k=8): {retrieval_hit_rate:.2f}% ({retrieval_hits}/{len(eval_data)} hits)")
     print(f"Generation Accuracy Score: {accuracy:.2f}% ({correct_count}/{len(eval_data)} correct)")
     print("===============================================================================\n")
+
+    # --- Export Detailed Reports ---
+    report_json_path = Path("data/evaluation/evaluation_report.json")
+    report_csv_path = Path("data/evaluation/evaluation_report.csv")
+    report_json_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # 1. Save JSON Report (supports nested lists like retrieved_pages)
+    report_data = {
+        "summary": {
+            "total_test_cases": len(eval_data),
+            "retrieval_hit_rate_pct": round(retrieval_hit_rate, 2),
+            "generation_accuracy_pct": round(accuracy, 2)
+        },
+        "results": results
+    }
+    with open(report_json_path, "w", encoding="utf-8") as f:
+        json.dump(report_data, f, indent=4, ensure_ascii=False)
+
+    # 2. Save CSV Report (flattens lists into strings for spreadsheet review)
+    with open(report_csv_path, "w", newline="", encoding="utf-8") as f:
+        fieldnames = ["question", "expected_page", "retrieved_pages", "page_hit", "is_correct", "reason"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for res in results:
+            row = res.copy()
+            row["retrieved_pages"] = str(row["retrieved_pages"]) # convert list to string for CSV
+            writer.writerow(row)
+
+    print(f"Reports successfully exported to:\n  -> {report_json_path}\n  -> {report_csv_path}")
+
+    try:
+        from src.evaluation.plot_evaluation import plot_evaluation_results
+        print("\nGenerating evaluation metrics plot...")
+        plot_evaluation_results()
+    except Exception as e:
+        print(f"Note: Could not auto-generate plot: {e}")
+
+    print(f"\nReports successfully exported to:\n  -> {report_json_path}\n  -> {report_csv_path}")
 
 if __name__ == "__main__":
     run_evaluation()

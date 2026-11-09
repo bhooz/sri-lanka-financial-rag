@@ -1,0 +1,159 @@
+{
+    "summary": {
+        "total_test_cases": 25,
+        "retrieval_hit_rate_pct": 80.0,
+        "generation_accuracy_pct": 48.0
+    },
+    "results": [
+        {
+            "question": "What is the new mandatory conversion period for the residual amount of export proceeds repatriated to Sri Lanka, after making authorized payments?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer correctly states the new mandatory conversion period for the residual amount of export proceeds repatriated to Sri Lanka, after making authorized payments, as one month, which is in line with the Ground Truth Answer."
+        },
+        {
+            "question": "What is the expected growth prospect for the financial sector in the Sri Lankan economy?",
+            "page_hit": false,
+            "is_correct": false,
+            "reason": "The Generated Answer does not provide a specific numerical value for the expected growth prospect of the financial sector, whereas the Ground Truth Answer provides a specific number (114). The Generated Answer provides an explanation of the expected growth prospect, but it does not directly answer the question with a numerical value."
+        },
+        {
+            "question": "What was the total expenditure on fuel imports in 2025, and how did it compare to the previous year?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer provides the correct total expenditure on fuel imports in 2025 (USD 4,042.5 million) and the correct comparison to the previous year (USD 4,375.1 million in 2024). However, the Generated Answer incorrectly states that the expenditure in 2025 is a decrease of 7.2 percent compared to 2024, when in fact, the expenditure in 2025 is a decrease of 7.2 percent compared to 2024, not an increase. The correct comparison should be that the expenditure in 2025 is a decrease of 7.2 percent compared to 2024."
+        },
+        {
+            "question": "What is the date on which the Gambling Regulatory Authority Act, No. 17 of 2025 (GRAA), was enacted?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer exactly matches the Ground Truth Answer, including the date of enactment. Therefore, it is factually consistent and correctly answers the question."
+        },
+        {
+            "question": "What is the basis on which exports and imports are recorded in the Sri Lankan financial report?",
+            "page_hit": false,
+            "is_correct": false,
+            "reason": "The Generated Answer incorrectly states that exports and imports are recorded on the historical cost basis. According to the Ground Truth, exports are recorded on the f.o.b. (free on board) valuation basis, and imports are recorded on the c.i.f. (cost, insurance, and freight) valuation basis."
+        },
+        {
+            "question": "What is the ownership of Outstanding Central Government Debt (as at end year) for the Government of Sri Lanka?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer correctly identifies that the ownership information is not explicitly stated in the provided tables and figures, but it does provide a specific value for the ownership of Central Government Debt (as at end year) for the year 2025, which is 95.0%. This value is consistent with the Ground Truth Answer."
+        },
+        {
+            "question": "What is the chapter number for the Public Financial Management chapter?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer directly matches the Ground Truth Answer, indicating that it is factually consistent and correctly answers the question."
+        },
+        {
+            "question": "What is the full form of the acronym 'USP'?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer exactly matches the Ground Truth Answer, indicating that it is factually consistent and correctly answers the question."
+        },
+        {
+            "question": "What was the combined cap of the targeted and time-bound package of fuel, electricity, and fertilizer subsidies introduced in March 2026?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer matches the Ground Truth Answer exactly, including the unit 'Rs.' and the numerical value '100 billion'. This indicates that the answer is factually consistent and accurately reflects the information provided in the Ground Truth."
+        },
+        {
+            "question": "What was the percentage decrease in interest payments from 2024 to 2025?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer exactly matches the Ground Truth Answer, indicating that it is factually consistent and correctly answers the question."
+        },
+        {
+            "question": "What was the change in the Gross Domestic Product (GDP) of the Agriculture, Forestry and Fishing sector from 2023 to 2025?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer states a change of 0.6%, but the Ground Truth Answer states a change of 1.4%. The Generated Answer is incorrect because it does not match the Ground Truth Answer."
+        },
+        {
+            "question": "What was the overall balance of the Balance of Payments for the year 2025?",
+            "page_hit": false,
+            "is_correct": false,
+            "reason": "The Generated Answer does not match the Ground Truth Answer. The Ground Truth Answer states the overall balance of the Balance of Payments for the year 2025 was 1,798, but the Generated Answer states it was a net balance of USD 904 million, which is not equal to the Ground Truth Answer."
+        },
+        {
+            "question": "What was the increase in revenue from Excise Duty on liquor from 2024 to 2025, and what percentage of the total Excise Duty revenue did it contribute?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer does not provide the correct total Excise Duty revenue in 2025, which is Rs. 231.5 billion according to the Ground Truth Answer. Additionally, the Generated Answer incorrectly attributes the increase in revenue to a 5.9% upward adjustment in excise duty on liquor based on inflation-adjusted indexation and increased liquor production in 2025, which is not mentioned in the Ground Truth Answer."
+        },
+        {
+            "question": "What is the effective date of the Strategic Development Projects (Amendment) Act, No. 26 of 2025?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer matches the Ground Truth Answer exactly, indicating that it is factually consistent and correctly answers the question."
+        },
+        {
+            "question": "What is the purpose of the additional allocations granted to the District Secretariat in Kurunegala?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer is factually consistent and correctly answers the question based on the Ground Truth. It lists all the specific reasons mentioned in the Ground Truth Answer, which is a clear and accurate representation of the purpose of the additional allocations granted to the District Secretariat in Kurunegala."
+        },
+        {
+            "question": "What was the increase in government expenditure on social welfare and social security from 2024 to 2025?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer provides additional information (total expenditure in 2025) that is not present in the Ground Truth Answer, making it factually inconsistent."
+        },
+        {
+            "question": "What was the stock of Treasury Bonds in 2025 compared to 2024?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer incorrectly states that the stock of Treasury Bonds increased by 10 percent. The Ground Truth Answer only provides the stock value for 2025 without any increase or decrease information. It only states that the stock value in 2025 is Rs. 15,567 billion, which is the same as the Ground Truth Answer for 2024."
+        },
+        {
+            "question": "What was the approximate amount of the first advance distributed among 13 PFIs under the SMELOC2 Project?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer matches the Ground Truth Answer exactly, providing the same amount (Rs. 6,825 million) and the same structure of information (approximate amount distributed among 13 PFIs under the SMELOC2 Project)."
+        },
+        {
+            "question": "What was the Net Profit for the year 2025 for Sri Lanka Insurance Corporation Ltd.?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer states that the text does not provide information on the net profit for Sri Lanka Insurance Corporation Ltd. for the year 2025, but the Ground Truth Answer is 2,661, which suggests that the information is indeed available in the text, just not explicitly stated in the Generated Answer."
+        },
+        {
+            "question": "What is the number of vehicles of the type 'Motorcycle' in the Government's vehicle fleet as of 2025?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer provides an incorrect number of vehicles of the type 'Motorcycle' in the Government's vehicle fleet as of 2025. The Ground Truth Answer states 2,515, which is not supported by the Generated Answer."
+        },
+        {
+            "question": "What is the total amount of fines and forfeits collected in 2025?",
+            "page_hit": false,
+            "is_correct": true,
+            "reason": "The Generated Answer provides the total amount of fines and forfeits collected in 2025, which matches the Ground Truth Answer of 10,708,177,994. The breakdown of fines and forfeits by category is also provided, which is consistent with the Ground Truth. However, the Generated Answer is missing the unit 'Crore' which is present in the Ground Truth, but this is a minor detail and does not affect the overall correctness of the answer."
+        },
+        {
+            "question": "What is the total amount allocated for the Western Provincial Council General Education Modernization Project in the 2025 financial report?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer contains a different amount (Rs. 9,034,815,879) than the Ground Truth Answer (Rs. 1,100,885,533), indicating an error in the amount allocated for the Western Provincial Council General Education Modernization Project in the 2025 financial report."
+        },
+        {
+            "question": "What is the dividend declared by the Lanka Sugar Company (Private) Limited in the year 2024/2025, and did it remit the amount to the General Treasury?",
+            "page_hit": true,
+            "is_correct": false,
+            "reason": "The Generated Answer does not provide any information about the dividend declared by the Lanka Sugar Company (Private) Limited in the year 2024/2025, or whether it remitted the amount to the General Treasury. However, the Ground Truth Answer provides specific details about the dividend amount declared and remitted, which the Generated Answer does not acknowledge. A more accurate response would be to state that the information is not available or to provide a link to the source where the information can be found."
+        },
+        {
+            "question": "What is the amount allocated for the Rehabilitation of Karainagar Boatyard project under the Ministry of Fisheries, Aquatic and Ocean Resources?",
+            "page_hit": true,
+            "is_correct": true,
+            "reason": "The Generated Answer is factually consistent and correctly answers the question. It provides the exact amount allocated for the Rehabilitation of Karainagar Boatyard project, which matches the Ground Truth Answer of Rs. 10,000,000."
+        },
+        {
+            "question": "What is the total amount of expenditure for the year 2022-2025 for the Ministry of Finance, Planning and Economic Development, Sri Lanka?",
+            "page_hit": false,
+            "is_correct": false,
+            "reason": "The Generated Answer does not provide the total expenditure for the years 2022-2025, but rather provides the expenditure for individual years (2021-2023). The answer also mentions that the text does not contain the total amount of expenditure for the specified period, which is partially correct but does not address the question directly."
+        }
+    ]
+}
